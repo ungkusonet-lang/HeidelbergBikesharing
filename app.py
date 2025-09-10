@@ -144,7 +144,9 @@ def osrm_snap_route(latlon_points):
             coords = geom["coordinates"]  # [lon,lat]
             d = 0.0
             for i in range(1, len(coords)):
-                d += geodesic((coords[i-1][1], coords[i-1][0]), (coords[i][1], coords[i][0])).meters
+                a = (coords[i-1][1], coords[i-1][0])
+                b = (coords[i][1], coords[i][0])
+                d += geodesic(a, b).meters
             dist_m = d
         return geom, float(dist_m), None
     except Exception as e:
@@ -323,12 +325,13 @@ with col_controls:
     st.caption("Use the map’s draw tool (polyline). A few vertices are enough. Then click **Snap to streets**.")
     # Try to capture the last drawn geometry from streamlit-folium's return dict
     last_drawn = None
-    for k in ["last_active_drawing", "last_drawing", "last_drawn"]:
-        if k in map_state and map_state[k]:
-            last_drawn = map_state[k]
-            break
-    if not last_drawn and "all_drawings" in map_state and map_state["all_drawings"]:
-        last_drawn = map_state["all_drawings"][-1]
+    if map_state: # Check if map_state is not None
+        for k in ["last_active_drawing", "last_drawing", "last_drawn"]:
+            if k in map_state and map_state[k]:
+                last_drawn = map_state[k]
+                break
+        if not last_drawn and "all_drawings" in map_state and map_state["all_drawings"]:
+            last_drawn = map_state["all_drawings"][-1]
 
     if st.button("Snap last drawing to streets"):
         if not last_drawn:
