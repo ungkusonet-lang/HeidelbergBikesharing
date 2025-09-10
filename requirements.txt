@@ -1,0 +1,10 @@
+streamlit==1.36.0
+streamlit-folium==0.20.0
+folium==0.16.0
+gspread==6.1.2
+google-auth==2.33.0
+pandas==2.2.2
+shapely==2.0.5
+geopy==2.4.1
+pyngrok==7.2.3
+requests==2.32.3
